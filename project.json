@@ -1,0 +1,31 @@
+{
+	"contentrating" : "Everyone",
+	"description" : "emmm 无聊做的\n原静态壁纸地址: https://h.bilibili.com/17869\n有频谱显示",
+	"file" : "bb.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0.25882352941176473 0.8352941176470589 1"
+			},
+			"screenFile" : 
+			{
+				"order" : 1,
+				"text" : "File",
+				"type" : "file"
+			}
+		},
+		"supportsaudioprocessing" : true
+	},
+	"preview" : "preview.jpg",
+	"tags" : [ "Anime" ],
+	"title" : "哔哩哔哩音频响应壁纸",
+	"type" : "web",
+	"visibility" : "public",
+	"workshopid" : "1551961057"
+}
