@@ -45,9 +45,15 @@
 
         var bg = new Image();
         bg.src = "bg.png";
+        
+        var bg2 = new Image();
+        bg2.src = "bg2.png";
 
         var mask = new Image();
         mask.src = "mask.png"
+        
+        var mask2 = new Image();
+        mask2.src = "mask2.png"
 
         var light = new Image();
         light.src = "light.png";
@@ -55,9 +61,15 @@
 
         var caidai = new Image();
         caidai.src = "caidai.png";
+        
+        var caidai2 = new Image();
+        caidai2.src = "caidai2.png";
 
         var two = new Image();
         two.src = "22.png";
+        
+        var two2 = new Image();
+        two2.src = "222.png";
 
         var screen = new Image();
         screen.src = "screen.png";
@@ -73,9 +85,6 @@
             }
         }*/
 
-
-
-
         var screenBorder = new Image();
         screenBorder.src = "screenborder.png";
 
@@ -83,6 +92,8 @@
         var l = 3;
         var data = new Array(128);
         var animData = new Array(128);
+        var light_time = 0;//蒙板时间
+        var light_set = 0.5;//蒙板透明度
 
         for (var i = 0; i < 128; i++) {
             data[i] = animData[i] = 0;
@@ -97,9 +108,12 @@
                     if (audioData[i] > max)
                         max = audioData[i];
                 }
+                
                 //按照音量的大小自适应动画长度提高低音量的显示效果
                 //peakValue = peakValue * 0.99 + max * 0.01;
                 //使用可视化变量增益函数后使用自适应会导致音量低谷期失真
+                
+                //可视化变量增益函数：((64-i)^2.25+1000)/1000
 
                 /*for (i = 0; i < 64; i++) {
                     data[63 - i] = audioData[i] / peakValue;
@@ -116,6 +130,7 @@
                 for (i = 0; i < 64; i++) {
                     data[127 - i] = audioData[i * 2 + 1] / peakValue;
                 }*/
+                
                 for (i = 0; i < 64; i++) {
                     data[i * 2] = audioData[i] / peakValue * ((64 - i) * (64 - i) * Math.sqrt(Math.sqrt(64 - i)) + 1000) / 1000;
                 }
@@ -144,18 +159,40 @@
                 animData[i] += (data[i] - animData[i]) * 0.3;
                 animData[i] = min(animData[i], 1);
             }
-             //绘制背景
+            
+            /*//设置蒙板源透明度
+            //该段程序执行后可以达到日夜按照时间的明暗渐变效果，但运行后程序黑屏，待修复
+            if(time.getHours() >= 6 && time.getHours() <12 ){
+                light_time = (time.getHours() - 6) * 60 + time.getMinutes();
+                light_set = light_time / 6 * 60;
+            }else if(time.getHours() >=12 && time.getHours() < 18){
+                light_time = (time.getHours() - 12) * 60 + time.getMinutes();
+                light_set = 1 - light_time / 6 * 60;
+            }else{
+                lightset = 1;
+            }*/
+            
+            //绘制背景
             ctx.clearRect(0, 0, 1980, 1080);
             ctx.drawImage(bg, 0, 0);
+            ctx.globalAlpha=light_set;//透明度设定
+            ctx.drawImage(bg2, 0, 0);
+            ctx.globalAlpha=1;//透明度恢复
             
-            //绘制显示器内容
+            /*//绘制显示器内容
             ctx.transform(1, -8.21 * (Math.PI / 180), 0, 1, -1041, -210);
             ctx.drawImage(screen, 0, 0, 1280, 720);
             ctx.resetTransform();
             
             //绘制显示器边框
             ctx.drawImage(screenBorder, 0, 0);
+            */
+            
+            //绘制日历背景
             ctx.drawImage(mask, 954, 99);
+            ctx.globalAlpha=light_set;//透明度设定
+            ctx.drawImage(mask2, 954, 99);
+            ctx.globalAlpha=1;//透明度恢复
             
             //绘制时间
             ctx.fillStyle = "#778d9b";
@@ -175,14 +212,15 @@
 
             ctx.fillText((time.getMonth()+1)+ "月"+time.getDate()+"日", 370, 35);
 
+            //绘制可视化音频
             ctx.fillStyle = "rgb(80,120,169)";
             for (var i = 32; i < 95; i++) {
                 ctx.fillRect(40 + 7.5 * (i - 32), 20 + (300 - 300 * animData[i]), 4, 300 * animData[i]);
             }
-
             ctx.resetTransform();
 
-            /*var greeting = "凌晨啦!";
+            /*//绘制手机文本
+            var greeting = "凌晨啦!";
 
             if (time.getHours() >= 6) {
                 greeting = "早上好!";
@@ -208,7 +246,8 @@
                 greeting = "晚安!";
             }*/
 
-            //手机
+            /*//手机
+            //运行该指令后黑屏
             ctx.transform(1.0911, -35 * (Math.PI / 180), 0, 0.5868, 1132.94, 564.07);
             ctx.rotate(56.5 * (Math.PI / 180));
             ctx.textAlign = "center";
@@ -216,19 +255,25 @@
             ctx.font = "36pt Impact";
             ctx.fillText(greeting, 135, 100);
             ctx.textAlign = "start";
-
             ctx.resetTransform();
+            */
 
             //设置新图层处覆盖模式
             ctx.globalCompositeOperation = "overlay";
               
             //绘制高光条
+            ctx.globalAlpha=1 - light_set * 0.8;//透明度设定
             ctx.drawImage(light, 971, 197);
             ctx.globalCompositeOperation = "source-over";
+            ctx.globalAlpha=1;//透明度返回默认
 
             //绘制22手办
             ctx.drawImage(caidai, 949, 25);
             ctx.drawImage(two, 1319, 345);
+            ctx.globalAlpha=light_set;//透明度设定
+            ctx.drawImage(caidai2, 949, 25);
+            ctx.drawImage(two2, 1319, 345);
+            ctx.globalAlpha=1;//透明度返回默认
 
             displayCtx.drawImage(cvs, 0, 0, display.width, display.height);
             window.requestAnimationFrame(render);
