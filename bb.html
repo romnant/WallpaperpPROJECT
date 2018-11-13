@@ -162,17 +162,23 @@
                 animData[i] = min(animData[i], 1);
             }
             
-            /*//设置蒙板源透明度
-            //该段程序执行后可以达到日夜按照时间的明暗渐变效果，但运行后程序黑屏，待修复
-            if(time.getHours() >= 6 && time.getHours() <12 ){
-                light_time = (time.getHours() - 6) * 60 + time.getMinutes();
-                light_set = light_time / 6 * 60;
-            }else if(time.getHours() >=12 && time.getHours() < 18){
+            //设置蒙板源透明度
+            var time = new Date();
+            if(time.getHours() >= 5 && time.getHours() <7 ){
+                light_time = (time.getHours() - 5) * 60 + time.getMinutes();
+                light_set = 1 - light_time / 2 / 60 * 0.8;
+            }else if(time.getHours() >=7 && time.getHours() < 12){
+                light_time = (time.getHours() - 7) * 60 + time.getMinutes();
+                light_set = 1 - light_time / 5 / 60 * 0.2 + 0.8;
+            }else if(time.getHours() >=12 && time.getHours() < 17){
                 light_time = (time.getHours() - 12) * 60 + time.getMinutes();
-                light_set = 1 - light_time / 6 * 60;
+                light_set = light_time / 5 / 60 * 0.2;
+            }else if(time.getHours() >=17 && time.getHours() < 19){
+                light_time = (time.getHours() - 12) * 60 + time.getMinutes();
+                light_set = light_time / 2 / 60 * 0.8 - 0.2;
             }else{
                 lightset = 1;
-            }*/
+            }
             
             //绘制背景
             ctx.clearRect(0, 0, 1980, 1080);
@@ -202,7 +208,6 @@
             ctx.font = "36pt Impact";
 
             ctx.transform(1, 2.05 * (Math.PI / 180), 0, 1, 0, 0);
-            var time = new Date();
             ctx.fillText((time.getHours() < 10 ? "0" : "") + time.getHours().toString() + ":" + (time.getMinutes() < 10 ? "0" : "") + time.getMinutes() + ":" + (time.getSeconds() < 10 ? "0" : "") + time.getSeconds().toString(), 715, 320);
             ctx.resetTransform();
 
@@ -265,7 +270,7 @@
             ctx.globalCompositeOperation = "overlay";
               
             //绘制高光条
-            ctx.globalAlpha=1 - light_set * 0.8;//透明度设定
+            ctx.globalAlpha=1 - light_set * 0.9;//透明度设定
             ctx.drawImage(light, 971, 197);
             ctx.globalCompositeOperation = "source-over";
             ctx.globalAlpha=1;//透明度返回默认
