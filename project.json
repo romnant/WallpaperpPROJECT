@@ -1,0 +1,19 @@
+{
+	"file" : "bb.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color"
+			}
+		},
+		"supportsaudioprocessing" : true
+	},
+	"preview" : "preview.png",
+	"tags" : [ "Anime" ],
+	"title" : "哔哩哔哩音频响应壁纸",
+	"type" : "web"
+}
