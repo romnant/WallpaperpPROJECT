@@ -95,7 +95,7 @@
         var data = new Array(128);
         var animData = new Array(128);
         var light_time = 0;//蒙板时间
-        var light_set = 0.5;//蒙板透明度
+        var light_set = 0;//蒙板透明度
 
         for (var i = 0; i < 128; i++) {
             data[i] = animData[i] = 0;
@@ -166,16 +166,16 @@
             var time = new Date();
             if(time.getHours() >= 5 && time.getHours() <7 ){
                 light_time = (time.getHours() - 5) * 60 + time.getMinutes();
-                light_set = 1 - light_time / 2 / 60 * 0.8;
+                light_set = 1 - light_time / 2 / 60 * 0.7;
             }else if(time.getHours() >=7 && time.getHours() < 12){
                 light_time = (time.getHours() - 7) * 60 + time.getMinutes();
-                light_set = 1 - light_time / 5 / 60 * 0.2 + 0.8;
+                light_set = 1 - light_time / 5 / 60 * 0.3 + 0.7;
             }else if(time.getHours() >=12 && time.getHours() < 17){
                 light_time = (time.getHours() - 12) * 60 + time.getMinutes();
-                light_set = light_time / 5 / 60 * 0.2;
+                light_set = light_time / 5 / 60 * 0.3;
             }else if(time.getHours() >=17 && time.getHours() < 19){
                 light_time = (time.getHours() - 12) * 60 + time.getMinutes();
-                light_set = light_time / 2 / 60 * 0.8 - 0.2;
+                light_set = light_time / 2 / 60 * 0.7 - 0.3;
             }else{
                 lightset = 1;
             }
